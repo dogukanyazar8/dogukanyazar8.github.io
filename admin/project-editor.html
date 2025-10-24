@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Editörü - QA Admin</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <i class="fas fa-bug"></i> QA Admin
+            </div>
+            <nav>
+                <ul class="admin-nav">
+                    <li class="admin-nav-item">
+                        <a href="dashboard.html" class="admin-nav-link">
+                            <i class="fas fa-home admin-nav-icon"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="blog-editor.html" class="admin-nav-link">
+                            <i class="fas fa-plus admin-nav-icon"></i> Blog Editörü
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="project-editor.html" class="admin-nav-link active">
+                            <i class="fas fa-folder-plus admin-nav-icon"></i> Proje Editörü
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="admin-user">
+                <div class="admin-user-info">
+                    <div class="admin-user-avatar" id="userAvatar">A</div>
+                    <span class="admin-user-name" id="userName">Admin</span>
+                </div>
+                <button class="admin-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1 class="admin-title" id="editorTitle">Yeni Proje</h1>
+                <p class="admin-subtitle">QA test projesi ekle/düzenle</p>
+            </div>
+            
+            <div class="editor-container">
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="title" class="form-label">Proje Adı *</label>
+                        <input type="text" id="title" class="form-input" required placeholder="Proje başlığı">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description" class="form-label">Açıklama *</label>
+                        <textarea id="description" class="form-textarea" required placeholder="Proje hakkında kısa açıklama" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category" class="form-label">Kategori *</label>
+                        <select id="category" class="form-select" required>
+                            <option value="">Kategori Seçin</option>
+                            <option value="Automation">Test Automation</option>
+                            <option value="API Testing">API Testing</option>
+                            <option value="Performance">Performance Testing</option>
+                            <option value="Mobile Testing">Mobile Testing</option>
+                            <option value="Security Testing">Security Testing</option>
+                            <option value="CI/CD">CI/CD Integration</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="technologies" class="form-label">Teknolojiler/Araçlar</label>
+                        <div class="tag-input-container" id="techContainer">
+                            <input type="text" class="tag-input-field" id="techInput" placeholder="Enter tuşuna basın...">
+                        </div>
+                        <small class="form-help">Kullanılan teknolojiler (örn: Selenium, Python, Pytest)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="githubUrl" class="form-label">GitHub URL</label>
+                        <input type="url" id="githubUrl" class="form-input" placeholder="https://github.com/...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="demoUrl" class="form-label">Demo/Rapor URL</label>
+                        <input type="url" id="demoUrl" class="form-input" placeholder="https://...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectImage" class="form-label">Proje Görseli</label>
+                        <div class="image-upload" id="imageUploadArea">
+                            <div class="image-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <p class="image-upload-text">Görsel yüklemek için tıklayın</p>
+                            <input type="file" id="projectImage" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="imagePreview" class="image-preview" style="display: none;"></div>
+                        <input type="hidden" id="imageUrl">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="featured"> Öne Çıkan Proje
+                        </label>
+                    </div>
+                    
+                    <div class="form-group" style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> <span id="submitBtnText">Kaydet</span>
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="window.location.href='dashboard.html'">
+                            <i class="fas fa-times"></i> İptal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/projects.js"></script>
+    
+    <script>
+        let technologies = [];
+        let editingProjectId = null;
+        let uploadedImageUrl = '';
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const result = await authManager.logout();
+            if (result.success) window.location.href = 'login.html';
+        });
+        
+        // Update user info
+        if (authManager.currentUser) {
+            document.getElementById('userName').textContent = authManager.getUserDisplayName();
+            document.getElementById('userAvatar').textContent = authManager.getUserDisplayName().charAt(0).toUpperCase();
+        }
+        
+        // Technology input handling
+        const techInput = document.getElementById('techInput');
+        const techContainer = document.getElementById('techContainer');
+        
+        techInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                addTech(techInput.value.trim());
+                techInput.value = '';
+            }
+        });
+        
+        function addTech(tech) {
+            if (tech && !technologies.includes(tech)) {
+                technologies.push(tech);
+                renderTechs();
+            }
+        }
+        
+        function removeTech(tech) {
+            technologies = technologies.filter(t => t !== tech);
+            renderTechs();
+        }
+        
+        function renderTechs() {
+            const existingTechs = techContainer.querySelectorAll('.tag-input-tag');
+            existingTechs.forEach(el => el.remove());
+            
+            technologies.forEach(tech => {
+                const techEl = document.createElement('div');
+                techEl.className = 'tag-input-tag';
+                techEl.innerHTML = `
+                    ${tech}
+                    <button type="button" class="tag-input-remove" onclick="removeTech('${tech}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                techContainer.insertBefore(techEl, techInput);
+            });
+        }
+        
+        // Image upload
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const projectImageInput = document.getElementById('projectImage');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        imageUploadArea.addEventListener('click', () => {
+            projectImageInput.click();
+        });
+        
+        projectImageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+                
+                // Upload to Firebase Storage
+                try {
+                    const result = await projectManager.uploadProjectImage(file);
+                    if (result.success) {
+                        uploadedImageUrl = result.url;
+                        document.getElementById('imageUrl').value = result.url;
+                        showToast('Görsel yüklendi', 'success');
+                    } else {
+                        showToast('Görsel yüklenemedi', 'error');
+                    }
+                } catch (error) {
+                    console.error('Image upload error:', error);
+                    showToast('Görsel yüklenirken hata oluştu', 'error');
+                }
+            }
+        });
+        
+        // Check if editing existing project
+        const urlParams = new URLSearchParams(window.location.search);
+        editingProjectId = urlParams.get('id');
+        
+        if (editingProjectId) {
+            loadProjectForEditing(editingProjectId);
+        }
+        
+        // Load project for editing
+        async function loadProjectForEditing(projectId) {
+            try {
+                const project = await projectManager.getProjectById(projectId);
+                if (!project) {
+                    showToast('Proje bulunamadı', 'error');
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                
+                document.getElementById('editorTitle').textContent = 'Projeyi Düzenle';
+                document.getElementById('submitBtnText').textContent = 'Güncelle';
+                
+                document.getElementById('title').value = project.title;
+                document.getElementById('description').value = project.description;
+                document.getElementById('category').value = project.category || '';
+                document.getElementById('githubUrl').value = project.githubUrl || '';
+                document.getElementById('demoUrl').value = project.demoUrl || '';
+                document.getElementById('featured').checked = project.featured || false;
+                
+                if (project.technologies) {
+                    technologies = project.technologies;
+                    renderTechs();
+                }
+                
+                if (project.image) {
+                    uploadedImageUrl = project.image;
+                    document.getElementById('imageUrl').value = project.image;
+                    imagePreview.innerHTML = `<img src="${project.image}" alt="Project">`;
+                    imagePreview.style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Error loading project:', error);
+                showToast('Proje yüklenirken hata oluştu', 'error');
+            }
+        }
+        
+        // Form submission
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+            
+            try {
+                const projectData = {
+                    title: document.getElementById('title').value,
+                    description: document.getElementById('description').value,
+                    category: document.getElementById('category').value,
+                    technologies: technologies,
+                    githubUrl: document.getElementById('githubUrl').value,
+                    demoUrl: document.getElementById('demoUrl').value,
+                    image: uploadedImageUrl || document.getElementById('imageUrl').value || '',
+                    featured: document.getElementById('featured').checked
+                };
+                
+                let result;
+                if (editingProjectId) {
+                    result = await projectManager.updateProject(editingProjectId, projectData);
+                } else {
+                    result = await projectManager.createProject(projectData);
+                }
+                
+                if (result.success) {
+                    showToast(editingProjectId ? 'Proje güncellendi' : 'Proje oluşturuldu', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showToast('İşlem başarısız: ' + result.error, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<i class="fas fa-save"></i> ${editingProjectId ? 'Güncelle' : 'Kaydet'}`;
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showToast('Bir hata oluştu', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fas fa-save"></i> ${editingProjectId ? 'Güncelle' : 'Kaydet'}`;
+            }
+        });
+    </script>
+</body>
+</html>

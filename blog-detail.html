@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog Yazısı - QA Testing & Test Automation">
+    <meta name="keywords" content="qa testing, test automation, selenium, api testing">
+    <meta name="author" content="Doğukan Yazar">
+    
+    <title id="pageTitle">Blog - QA Testing</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="css/markdown.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <i class="fas fa-bug"></i> QA Blog
+            </a>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="navbar-link">Blog</a></li>
+                <li><a href="projects.html" class="navbar-link">Projeler</a></li>
+                <li><a href="about.html" class="navbar-link">Hakkımda</a></li>
+                <li><a href="admin/login.html" class="navbar-link"><i class="fas fa-lock"></i></a></li>
+            </ul>
+            
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Detail Header -->
+    <header class="blog-detail-header" id="blogHeader">
+        <div class="container">
+            <h1 class="blog-detail-title" id="blogTitle">Yükleniyor...</h1>
+            <div class="blog-detail-meta" id="blogMeta">
+                <!-- Meta info will be loaded dynamically -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Blog Detail Content -->
+    <main class="blog-detail-container">
+        <div id="loadingContainer" class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i> İçerik yükleniyor...
+        </div>
+        
+        <div id="blogContent" style="display: none;">
+            <img id="blogImage" class="blog-detail-image" alt="">
+            
+            <article class="blog-detail-content markdown-content" id="blogBody">
+                <!-- Blog content will be rendered here -->
+            </article>
+            
+            <div class="blog-detail-tags" id="blogTags">
+                <!-- Tags will be loaded here -->
+            </div>
+            
+            <div class="blog-detail-share">
+                <h3 class="blog-detail-share-title">Bu yazıyı paylaş</h3>
+                <div class="share-buttons">
+                    <button class="share-button twitter" id="shareTwitter">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </button>
+                    <button class="share-button facebook" id="shareFacebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </button>
+                    <button class="share-button linkedin" id="shareLinkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </button>
+                    <button class="share-button whatsapp" id="shareWhatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                </div>
+            </div>
+            
+            <div class="related-posts" id="relatedPostsSection" style="display: none;">
+                <h2 class="related-posts-title">İlgili Yazılar</h2>
+                <div class="related-posts-grid" id="relatedPosts">
+                    <!-- Related posts will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Doğukan Yazar - Senior QA Specialist. Tüm hakları saklıdır.</p>
+                <p class="footer-tagline">Kalite sadece bir hedef değil, bir yolculuktur 🎯</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Marked.js for Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/blog.js"></script>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+        
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                navbarMenu.classList.toggle('active');
+            });
+        }
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        
+        // Get slug from URL
+        const slug = getUrlParameter('slug');
+        
+        if (!slug) {
+            window.location.href = 'index.html';
+        }
+        
+        // Load blog post
+        async function loadBlogPost() {
+            try {
+                const post = await blogManager.getPostBySlug(slug);
+                
+                if (!post) {
+                    document.getElementById('loadingContainer').innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>Blog yazısı bulunamadı.</p>
+                            <a href="index.html" class="btn btn-primary" style="margin-top: 1rem;">Ana Sayfaya Dön</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Increment view count
+                await blogManager.incrementViews(post.id);
+                
+                // Update page title and meta
+                document.getElementById('pageTitle').textContent = post.title + ' - QA Blog';
+                document.querySelector('meta[name="description"]').setAttribute('content', post.excerpt);
+                
+                // Display blog post
+                document.getElementById('blogTitle').textContent = post.title;
+                document.getElementById('blogMeta').innerHTML = `
+                    <span class="blog-detail-meta-item">
+                        <i class="fas fa-calendar"></i>
+                        ${formatDate(post.createdAt)}
+                    </span>
+                    <span class="blog-detail-meta-item">
+                        <i class="fas fa-clock"></i>
+                        ${post.readingTime}
+                    </span>
+                    <span class="blog-detail-meta-item">
+                        <i class="fas fa-eye"></i>
+                        ${(post.views || 0) + 1} görüntülenme
+                    </span>
+                    <span class="blog-detail-meta-item">
+                        <i class="fas fa-folder"></i>
+                        ${escapeHtml(post.category)}
+                    </span>
+                `;
+                
+                // Display cover image
+                const blogImage = document.getElementById('blogImage');
+                if (post.coverImage) {
+                    blogImage.src = post.coverImage;
+                    blogImage.alt = post.title;
+                    blogImage.style.display = 'block';
+                } else {
+                    blogImage.style.display = 'none';
+                }
+                
+                // Render markdown content
+                const blogBody = document.getElementById('blogBody');
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true,
+                    highlight: function(code, lang) {
+                        if (lang && Prism.languages[lang]) {
+                            return Prism.highlight(code, Prism.languages[lang], lang);
+                        }
+                        return code;
+                    }
+                });
+                blogBody.innerHTML = marked.parse(post.content);
+                
+                // Apply syntax highlighting
+                Prism.highlightAllUnder(blogBody);
+                
+                // Display tags
+                if (post.tags && post.tags.length > 0) {
+                    document.getElementById('blogTags').innerHTML = post.tags
+                        .map(tag => `<span class="tag">${escapeHtml(tag)}</span>`)
+                        .join('');
+                }
+                
+                // Setup share buttons
+                const currentUrl = window.location.href;
+                const title = post.title;
+                
+                document.getElementById('shareTwitter').addEventListener('click', () => {
+                    shareOnSocial('twitter', currentUrl, title);
+                });
+                
+                document.getElementById('shareFacebook').addEventListener('click', () => {
+                    shareOnSocial('facebook', currentUrl, title);
+                });
+                
+                document.getElementById('shareLinkedin').addEventListener('click', () => {
+                    shareOnSocial('linkedin', currentUrl, title);
+                });
+                
+                document.getElementById('shareWhatsapp').addEventListener('click', () => {
+                    shareOnSocial('whatsapp', currentUrl, title);
+                });
+                
+                // Load related posts
+                loadRelatedPosts(post.id, post.category, post.tags);
+                
+                // Show content, hide loading
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('blogContent').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading blog post:', error);
+                document.getElementById('loadingContainer').innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Blog yazısı yüklenirken bir hata oluştu.</p>
+                        <a href="index.html" class="btn btn-primary" style="margin-top: 1rem;">Ana Sayfaya Dön</a>
+                    </div>
+                `;
+            }
+        }
+        
+        async function loadRelatedPosts(postId, category, tags) {
+            try {
+                const relatedPosts = await blogManager.getRelatedPosts(postId, category, tags, 3);
+                
+                if (relatedPosts.length > 0) {
+                    const relatedPostsContainer = document.getElementById('relatedPosts');
+                    relatedPostsContainer.innerHTML = relatedPosts.map(post => `
+                        <article class="card">
+                            <div style="overflow: hidden; height: 200px;">
+                                <img src="${post.coverImage || 'https://via.placeholder.com/400x200/2563eb/ffffff?text=QA'}" 
+                                     alt="${escapeHtml(post.title)}" 
+                                     style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div style="padding: 1.5rem;">
+                                <span class="tag" style="margin-bottom: 0.5rem;">${escapeHtml(post.category)}</span>
+                                <a href="blog-detail.html?slug=${post.slug}" style="display: block; margin: 0.5rem 0;">
+                                    <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-color);">
+                                        ${escapeHtml(post.title)}
+                                    </h3>
+                                </a>
+                                <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0.5rem 0;">
+                                    ${escapeHtml(truncateText(post.excerpt, 100))}
+                                </p>
+                                <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: var(--text-secondary); margin-top: 1rem;">
+                                    <span><i class="fas fa-calendar"></i> ${formatDateShort(post.createdAt)}</span>
+                                    <span><i class="fas fa-clock"></i> ${post.readingTime}</span>
+                                </div>
+                            </div>
+                        </article>
+                    `).join('');
+                    
+                    document.getElementById('relatedPostsSection').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading related posts:', error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBlogPost();
+        });
+    </script>
+</body>
+</html>

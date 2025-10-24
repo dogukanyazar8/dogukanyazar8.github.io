@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Doğukan Yazar - Senior QA Specialist Hakkında">
+    <title>Hakkımda - QA Blog</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/blog.css">
+    
+    <style>
+        .about-header {
+            padding: 6rem 0 3rem;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+        
+        .about-section {
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .about-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            color: var(--primary-color);
+        }
+        
+        .about-section p {
+            line-height: 1.8;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-color);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .skill-item {
+            background: var(--card-bg);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .skill-item i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .contact-card {
+            background: var(--card-bg);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        
+        .contact-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <i class="fas fa-bug"></i> QA Blog
+            </a>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="navbar-link">Blog</a></li>
+                <li><a href="projects.html" class="navbar-link">Projeler</a></li>
+                <li><a href="about.html" class="navbar-link active">Hakkımda</a></li>
+                <li><a href="admin/login.html" class="navbar-link"><i class="fas fa-lock"></i></a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+            <button class="mobile-toggle" id="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="about-header">
+        <div class="container">
+            <h1 class="blog-header-title"><i class="fas fa-user"></i> Hakkımda</h1>
+            <p class="blog-header-subtitle">Senior QA Specialist | Test Automation Engineer</p>
+        </div>
+    </header>
+
+    <main class="about-content">
+        <section class="about-section">
+            <h2>Merhaba! 👋</h2>
+            <p>
+                Ben Doğukan Yazar, yazılım kalite güvencesi alanında uzmanlaşmış bir Senior QA Specialist'im. 
+                Test otomasyonu, API testing, performance testing ve sürekli entegrasyon konularında deneyim sahibiyim.
+            </p>
+            <p>
+                Kariyerim boyunca, kaliteli yazılım ürünleri sunmak için test süreçlerini optimize etmeye ve 
+                otomasyon çözümleri geliştirmeye odaklandım. Modern test araçları ve metodolojileri kullanarak, 
+                yazılım geliştirme süreçlerinde kaliteyi artırmayı hedefliyorum.
+            </p>
+            <p>
+                Bu blog'da test otomasyonu, QA best practices, araç karşılaştırmaları ve sektördeki deneyimlerimi 
+                paylaşıyorum. Amacım, QA topluluğuna katkıda bulunmak ve bilgi birikimimi sizlerle paylaşmak.
+            </p>
+        </section>
+
+        <section class="about-section">
+            <h2>Uzmanlık Alanlarım</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="fas fa-robot"></i>
+                    <h3>Test Otomasyonu</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-code"></i>
+                    <h3>Selenium</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-vial"></i>
+                    <h3>Cypress</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-plug"></i>
+                    <h3>API Testing</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>Performance Testing</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-sync"></i>
+                    <h3>CI/CD</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-python"></i>
+                    <h3>Python</h3>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <h2>Kullandığım Araçlar</h2>
+            <p>
+                <strong>Test Automation:</strong> Selenium WebDriver, Cypress, Playwright, Puppeteer<br>
+                <strong>API Testing:</strong> Postman, REST Assured, Newman<br>
+                <strong>Performance:</strong> JMeter, Gatling, K6<br>
+                <strong>CI/CD:</strong> Jenkins, GitHub Actions, GitLab CI<br>
+                <strong>Test Management:</strong> Jira, TestRail, Zephyr<br>
+                <strong>Programming:</strong> Python, JavaScript, Java<br>
+                <strong>Version Control:</strong> Git, GitHub, GitLab
+            </p>
+        </section>
+
+        <section class="about-section">
+            <h2>İletişim</h2>
+            <div class="contact-info">
+                <div class="contact-card">
+                    <i class="fab fa-github"></i>
+                    <h3>GitHub</h3>
+                    <p><a href="https://github.com/dogukanyazar8" target="_blank">@dogukanyazar8</a></p>
+                </div>
+                <div class="contact-card">
+                    <i class="fab fa-linkedin"></i>
+                    <h3>LinkedIn</h3>
+                    <p><a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn Profilim</a></p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p><a href="mailto:your.email@example.com">your.email@example.com</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Doğukan Yazar - Senior QA Specialist. Tüm hakları saklıdır.</p>
+                <p class="footer-tagline">Kalite sadece bir hedef değil, bir yolculuktur 🎯</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script>
+        document.getElementById('mobile-toggle')?.addEventListener('click', () => {
+            document.getElementById('navbarMenu').classList.toggle('active');
+        });
+        document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+    </script>
+</body>
+</html>

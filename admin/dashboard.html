@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - QA Blog</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <i class="fas fa-bug"></i> QA Admin
+            </div>
+            
+            <nav>
+                <ul class="admin-nav">
+                    <li class="admin-nav-item">
+                        <a href="dashboard.html" class="admin-nav-link active">
+                            <i class="fas fa-home admin-nav-icon"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="blog-editor.html" class="admin-nav-link">
+                            <i class="fas fa-plus admin-nav-icon"></i>
+                            Yeni Blog
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="project-editor.html" class="admin-nav-link">
+                            <i class="fas fa-folder-plus admin-nav-icon"></i>
+                            Yeni Proje
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="admin-user">
+                <div class="admin-user-info">
+                    <div class="admin-user-avatar" id="userAvatar">A</div>
+                    <span class="admin-user-name" id="userName">Admin</span>
+                </div>
+                <button class="admin-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1 class="admin-title">Dashboard</h1>
+                <p class="admin-subtitle">Blog ve proje yönetimi</p>
+            </div>
+            
+            <!-- Stats -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Toplam Yazı</span>
+                        <div class="stat-card-icon primary">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value" id="totalPosts">0</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Yayınlanan</span>
+                        <div class="stat-card-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value" id="publishedPosts">0</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Toplam Görüntülenme</span>
+                        <div class="stat-card-icon warning">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value" id="totalViews">0</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Projeler</span>
+                        <div class="stat-card-icon primary">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value" id="totalProjects">0</div>
+                </div>
+            </div>
+            
+            <!-- Blog Posts Table -->
+            <div class="admin-table-container">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">Blog Yazıları</h2>
+                    <a href="blog-editor.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Yeni Yazı
+                    </a>
+                </div>
+                
+                <div id="postsTableContainer">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Table -->
+            <div class="admin-table-container" style="margin-top: 2rem;">
+                <div class="admin-table-header">
+                    <h2 class="admin-table-title">Projeler</h2>
+                    <a href="project-editor.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Yeni Proje
+                    </a>
+                </div>
+                
+                <div id="projectsTableContainer">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/blog.js"></script>
+    <script src="../js/projects.js"></script>
+    
+    <script>
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const result = await authManager.logout();
+            if (result.success) {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Update user info
+        if (authManager.currentUser) {
+            document.getElementById('userName').textContent = authManager.getUserDisplayName();
+            document.getElementById('userAvatar').textContent = authManager.getUserDisplayName().charAt(0).toUpperCase();
+        }
+        
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const [posts, projects] = await Promise.all([
+                    blogManager.getAllPosts(),
+                    projectManager.getAllProjects()
+                ]);
+                
+                // Update stats
+                const publishedPosts = posts.filter(p => p.published);
+                const totalViews = posts.reduce((sum, p) => sum + (p.views || 0), 0);
+                
+                document.getElementById('totalPosts').textContent = posts.length;
+                document.getElementById('publishedPosts').textContent = publishedPosts.length;
+                document.getElementById('totalViews').textContent = formatNumber(totalViews);
+                document.getElementById('totalProjects').textContent = projects.length;
+                
+                // Display posts table
+                displayPostsTable(posts);
+                displayProjectsTable(projects);
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showToast('Dashboard yüklenirken hata oluştu', 'error');
+            }
+        }
+        
+        function displayPostsTable(posts) {
+            const container = document.getElementById('postsTableContainer');
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--text-secondary);">Henüz blog yazısı yok.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Kategori</th>
+                            <th>Durum</th>
+                            <th>Görüntülenme</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${posts.map(post => `
+                            <tr>
+                                <td><strong>${escapeHtml(post.title)}</strong></td>
+                                <td>${escapeHtml(post.category)}</td>
+                                <td>
+                                    <span class="status-badge ${post.published ? 'published' : 'draft'}">
+                                        ${post.published ? 'Yayında' : 'Taslak'}
+                                    </span>
+                                </td>
+                                <td>${post.views || 0}</td>
+                                <td>${formatDateShort(post.createdAt)}</td>
+                                <td class="admin-table-actions">
+                                    <button class="admin-table-action edit" onclick="editPost('${post.id}')">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </button>
+                                    <button class="admin-table-action delete" onclick="deletePost('${post.id}', '${escapeHtml(post.title)}')">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function displayProjectsTable(projects) {
+            const container = document.getElementById('projectsTableContainer');
+            
+            if (projects.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--text-secondary);">Henüz proje yok.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Kategori</th>
+                            <th>Öne Çıkan</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${projects.map(project => `
+                            <tr>
+                                <td><strong>${escapeHtml(project.title)}</strong></td>
+                                <td>${escapeHtml(project.category || 'Genel')}</td>
+                                <td>${project.featured ? '⭐' : '-'}</td>
+                                <td>${formatDateShort(project.createdAt)}</td>
+                                <td class="admin-table-actions">
+                                    <button class="admin-table-action edit" onclick="editProject('${project.id}')">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </button>
+                                    <button class="admin-table-action delete" onclick="deleteProject('${project.id}', '${escapeHtml(project.title)}')">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function editPost(id) {
+            window.location.href = `blog-editor.html?id=${id}`;
+        }
+        
+        async function deletePost(id, title) {
+            if (!confirm(`"${title}" yazısını silmek istediğinize emin misiniz?`)) return;
+            
+            const result = await blogManager.deletePost(id);
+            if (result.success) {
+                showToast('Blog yazısı silindi', 'success');
+                loadDashboard();
+            } else {
+                showToast('Silme işlemi başarısız', 'error');
+            }
+        }
+        
+        function editProject(id) {
+            window.location.href = `project-editor.html?id=${id}`;
+        }
+        
+        async function deleteProject(id, title) {
+            if (!confirm(`"${title}" projesini silmek istediğinize emin misiniz?`)) return;
+            
+            const result = await projectManager.deleteProject(id);
+            if (result.success) {
+                showToast('Proje silindi', 'success');
+                loadDashboard();
+            } else {
+                showToast('Silme işlemi başarısız', 'error');
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

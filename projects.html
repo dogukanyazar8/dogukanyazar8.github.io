@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="QA Test Projeleri - Test Otomasyonu ve QA Çalışmaları">
+    <title>Projeler - QA Blog</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/blog.css">
+    
+    <style>
+        .projects-header {
+            padding: 6rem 0 3rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--spacing-xl);
+            padding: var(--spacing-2xl) 0;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .project-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-content {
+            padding: var(--spacing-lg);
+        }
+        
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .project-links {
+            display: flex;
+            gap: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <i class="fas fa-bug"></i> QA Blog
+            </a>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="navbar-link">Blog</a></li>
+                <li><a href="projects.html" class="navbar-link active">Projeler</a></li>
+                <li><a href="about.html" class="navbar-link">Hakkımda</a></li>
+                <li><a href="admin/login.html" class="navbar-link"><i class="fas fa-lock"></i></a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+            <button class="mobile-toggle" id="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="projects-header">
+        <div class="container">
+            <h1 class="blog-header-title"><i class="fas fa-flask"></i> QA Test Projeleri</h1>
+            <p class="blog-header-subtitle">Test Otomasyonu ve Kalite Güvence Çalışmaları</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="projects-grid" id="projectsGrid">
+            <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Projeler yükleniyor...</div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Doğukan Yazar - Senior QA Specialist. Tüm hakları saklıdır.</p>
+                <p class="footer-tagline">Kalite sadece bir hedef değil, bir yolculuktur 🎯</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/projects.js"></script>
+    
+    <script>
+        document.getElementById('mobile-toggle')?.addEventListener('click', () => {
+            document.getElementById('navbarMenu').classList.toggle('active');
+        });
+        document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+        
+        async function loadProjects() {
+            try {
+                const projects = await projectManager.getAllProjects();
+                const grid = document.getElementById('projectsGrid');
+                
+                if (projects.length === 0) {
+                    grid.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-secondary);"><i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i><p>Henüz proje bulunmuyor.</p></div>';
+                    return;
+                }
+                
+                grid.innerHTML = projects.map(project => `
+                    <article class="project-card">
+                        <div class="project-image">
+                            <img src="${project.image || 'https://via.placeholder.com/400x200/10b981/ffffff?text=QA+Project'}" alt="${escapeHtml(project.title)}">
+                        </div>
+                        <div class="project-content">
+                            <h2 class="project-title">${escapeHtml(project.title)}</h2>
+                            <p class="project-description">${escapeHtml(project.description)}</p>
+                            ${project.technologies ? `
+                                <div class="project-tech">
+                                    ${project.technologies.map(tech => `<span class="tag">${escapeHtml(tech)}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="project-links">
+                                ${project.githubUrl ? `<a href="${project.githubUrl}" class="btn btn-primary" target="_blank"><i class="fab fa-github"></i> GitHub</a>` : ''}
+                                ${project.demoUrl ? `<a href="${project.demoUrl}" class="btn btn-secondary" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>` : ''}
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('projectsGrid').innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-secondary);">Projeler yüklenirken hata oluştu.</div>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadProjects);
+    </script>
+</body>
+</html>
