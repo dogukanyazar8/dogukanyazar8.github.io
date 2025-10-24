@@ -1,0 +1,50 @@
+// Firebase Storage Security Rules
+// Copy these rules to Firebase Console > Storage > Rules
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to validate image file
+    function isValidImage() {
+      return request.resource.size < 5 * 1024 * 1024 // 5MB max
+        && request.resource.contentType.matches('image/.*');
+    }
+    
+    // Blog images
+    match /blog-images/{fileName} {
+      // Anyone can read
+      allow read: if true;
+      
+      // Only authenticated users can write
+      // File must be an image and under 5MB
+      allow write: if isAuthenticated() && isValidImage();
+    }
+    
+    // Project images
+    match /project-images/{fileName} {
+      // Anyone can read
+      allow read: if true;
+      
+      // Only authenticated users can write
+      // File must be an image and under 5MB
+      allow write: if isAuthenticated() && isValidImage();
+    }
+    
+    // User avatars (optional)
+    match /avatars/{userId}/{fileName} {
+      // Anyone can read
+      allow read: if true;
+      
+      // Only the user can upload their own avatar
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId 
+        && isValidImage();
+    }
+  }
+}

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Editörü - QA Admin</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SimpleMDE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <i class="fas fa-bug"></i> QA Admin
+            </div>
+            <nav>
+                <ul class="admin-nav">
+                    <li class="admin-nav-item">
+                        <a href="dashboard.html" class="admin-nav-link">
+                            <i class="fas fa-home admin-nav-icon"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="blog-editor.html" class="admin-nav-link active">
+                            <i class="fas fa-plus admin-nav-icon"></i> Blog Editörü
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="project-editor.html" class="admin-nav-link">
+                            <i class="fas fa-folder-plus admin-nav-icon"></i> Proje Editörü
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="admin-user">
+                <div class="admin-user-info">
+                    <div class="admin-user-avatar" id="userAvatar">A</div>
+                    <span class="admin-user-name" id="userName">Admin</span>
+                </div>
+                <button class="admin-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1 class="admin-title" id="editorTitle">Yeni Blog Yazısı</h1>
+                <p class="admin-subtitle">Markdown destekli blog editörü</p>
+            </div>
+            
+            <div class="editor-container">
+                <form id="blogForm">
+                    <div class="form-group">
+                        <label for="title" class="form-label">Başlık *</label>
+                        <input type="text" id="title" class="form-input" required placeholder="Blog başlığı">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="slug" class="form-label">Slug</label>
+                        <input type="text" id="slug" class="form-input" placeholder="blog-basligi (otomatik oluşturulur)">
+                        <small class="form-help">URL'de kullanılacak kısa isim</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="excerpt" class="form-label">Kısa Açıklama *</label>
+                        <textarea id="excerpt" class="form-textarea" required placeholder="Blog özeti (150-200 karakter)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category" class="form-label">Kategori *</label>
+                        <select id="category" class="form-select" required>
+                            <option value="">Kategori Seçin</option>
+                            <option value="QA Testing">QA Testing</option>
+                            <option value="Test Automation">Test Automation</option>
+                            <option value="API Testing">API Testing</option>
+                            <option value="Performance Testing">Performance Testing</option>
+                            <option value="Mobile Testing">Mobile Testing</option>
+                            <option value="Best Practices">Best Practices</option>
+                            <option value="Tools & Frameworks">Tools & Frameworks</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tags" class="form-label">Etiketler</label>
+                        <div class="tag-input-container" id="tagContainer">
+                            <input type="text" class="tag-input-field" id="tagInput" placeholder="Enter tuşuna basın...">
+                        </div>
+                        <small class="form-help">Virgül veya Enter ile ayırın</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="coverImage" class="form-label">Kapak Görseli</label>
+                        <div class="image-upload" id="imageUploadArea">
+                            <div class="image-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <p class="image-upload-text">Görsel yüklemek için tıklayın</p>
+                            <input type="file" id="coverImage" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="imagePreview" class="image-preview" style="display: none;"></div>
+                        <input type="hidden" id="coverImageUrl">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content" class="form-label">İçerik *</label>
+                        <textarea id="content" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="published"> Yayınla
+                        </label>
+                    </div>
+                    
+                    <div class="form-group" style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> <span id="submitBtnText">Kaydet</span>
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="window.location.href='dashboard.html'">
+                            <i class="fas fa-times"></i> İptal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- SimpleMDE -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/blog.js"></script>
+    
+    <script>
+        let simplemde;
+        let tags = [];
+        let editingPostId = null;
+        let uploadedImageUrl = '';
+        
+        // Initialize SimpleMDE
+        document.addEventListener('DOMContentLoaded', () => {
+            simplemde = new SimpleMDE({
+                element: document.getElementById('content'),
+                spellChecker: false,
+                placeholder: 'Blog içeriğinizi Markdown formatında yazın...',
+                toolbar: [
+                    'bold', 'italic', 'heading', '|',
+                    'quote', 'unordered-list', 'ordered-list', '|',
+                    'link', 'image', '|',
+                    'code', 'table', '|',
+                    'preview', 'side-by-side', 'fullscreen', '|',
+                    'guide'
+                ],
+                status: ['lines', 'words', 'cursor']
+            });
+            
+            // Check if editing existing post
+            const urlParams = new URLSearchParams(window.location.search);
+            editingPostId = urlParams.get('id');
+            
+            if (editingPostId) {
+                loadPostForEditing(editingPostId);
+            }
+        });
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const result = await authManager.logout();
+            if (result.success) window.location.href = 'login.html';
+        });
+        
+        // Update user info
+        if (authManager.currentUser) {
+            document.getElementById('userName').textContent = authManager.getUserDisplayName();
+            document.getElementById('userAvatar').textContent = authManager.getUserDisplayName().charAt(0).toUpperCase();
+        }
+        
+        // Auto-generate slug from title
+        document.getElementById('title').addEventListener('input', (e) => {
+            if (!editingPostId) {
+                document.getElementById('slug').value = createSlug(e.target.value);
+            }
+        });
+        
+        // Tag input handling
+        const tagInput = document.getElementById('tagInput');
+        const tagContainer = document.getElementById('tagContainer');
+        
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                addTag(tagInput.value.trim());
+                tagInput.value = '';
+            }
+        });
+        
+        function addTag(tag) {
+            if (tag && !tags.includes(tag)) {
+                tags.push(tag);
+                renderTags();
+            }
+        }
+        
+        function removeTag(tag) {
+            tags = tags.filter(t => t !== tag);
+            renderTags();
+        }
+        
+        function renderTags() {
+            const existingTags = tagContainer.querySelectorAll('.tag-input-tag');
+            existingTags.forEach(el => el.remove());
+            
+            tags.forEach(tag => {
+                const tagEl = document.createElement('div');
+                tagEl.className = 'tag-input-tag';
+                tagEl.innerHTML = `
+                    ${tag}
+                    <button type="button" class="tag-input-remove" onclick="removeTag('${tag}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                tagContainer.insertBefore(tagEl, tagInput);
+            });
+        }
+        
+        // Image upload
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const coverImageInput = document.getElementById('coverImage');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        imageUploadArea.addEventListener('click', () => {
+            coverImageInput.click();
+        });
+        
+        coverImageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+                
+                // Upload to Firebase Storage
+                try {
+                    const result = await blogManager.uploadImage(file);
+                    if (result.success) {
+                        uploadedImageUrl = result.url;
+                        document.getElementById('coverImageUrl').value = result.url;
+                        showToast('Görsel yüklendi', 'success');
+                    } else {
+                        showToast('Görsel yüklenemedi', 'error');
+                    }
+                } catch (error) {
+                    console.error('Image upload error:', error);
+                    showToast('Görsel yüklenirken hata oluştu', 'error');
+                }
+            }
+        });
+        
+        // Load post for editing
+        async function loadPostForEditing(postId) {
+            try {
+                const post = await blogManager.getPostById(postId);
+                if (!post) {
+                    showToast('Yazı bulunamadı', 'error');
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                
+                document.getElementById('editorTitle').textContent = 'Blog Yazısını Düzenle';
+                document.getElementById('submitBtnText').textContent = 'Güncelle';
+                
+                document.getElementById('title').value = post.title;
+                document.getElementById('slug').value = post.slug;
+                document.getElementById('excerpt').value = post.excerpt;
+                document.getElementById('category').value = post.category;
+                document.getElementById('published').checked = post.published;
+                
+                if (post.tags) {
+                    tags = post.tags;
+                    renderTags();
+                }
+                
+                if (post.coverImage) {
+                    uploadedImageUrl = post.coverImage;
+                    document.getElementById('coverImageUrl').value = post.coverImage;
+                    imagePreview.innerHTML = `<img src="${post.coverImage}" alt="Cover">`;
+                    imagePreview.style.display = 'block';
+                }
+                
+                simplemde.value(post.content);
+                
+            } catch (error) {
+                console.error('Error loading post:', error);
+                showToast('Yazı yüklenirken hata oluştu', 'error');
+            }
+        }
+        
+        // Form submission
+        document.getElementById('blogForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+            
+            try {
+                const postData = {
+                    title: document.getElementById('title').value,
+                    slug: document.getElementById('slug').value || createSlug(document.getElementById('title').value),
+                    excerpt: document.getElementById('excerpt').value,
+                    category: document.getElementById('category').value,
+                    tags: tags,
+                    coverImage: uploadedImageUrl || document.getElementById('coverImageUrl').value || '',
+                    content: simplemde.value(),
+                    published: document.getElementById('published').checked,
+                    author: 'Doğukan Yazar'
+                };
+                
+                let result;
+                if (editingPostId) {
+                    result = await blogManager.updatePost(editingPostId, postData);
+                } else {
+                    result = await blogManager.createPost(postData);
+                }
+                
+                if (result.success) {
+                    showToast(editingPostId ? 'Yazı güncellendi' : 'Yazı oluşturuldu', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showToast('İşlem başarısız: ' + result.error, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<i class="fas fa-save"></i> ${editingPostId ? 'Güncelle' : 'Kaydet'}`;
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showToast('Bir hata oluştu', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fas fa-save"></i> ${editingPostId ? 'Güncelle' : 'Kaydet'}`;
+            }
+        });
+    </script>
+</body>
+</html>
