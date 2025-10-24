@@ -28,7 +28,7 @@ You can use the Firebase Admin SDK to batch import data programmatically.
   "category": "Test Automation",
   "tags": ["selenium", "webdriver", "automation", "testing", "python"],
   "coverImage": "https://via.placeholder.com/1200x600/2563eb/ffffff?text=Selenium+Web+Automation",
-  "author": "Doğukan Yazar",
+  "author": "Your Name",
   "published": true,
   "views": 0,
   "readingTime": "5 dakika",
@@ -48,7 +48,7 @@ You can use the Firebase Admin SDK to batch import data programmatically.
   "category": "API Testing",
   "tags": ["api", "postman", "rest-assured", "testing", "automation"],
   "coverImage": "https://via.placeholder.com/1200x600/10b981/ffffff?text=API+Testing",
-  "author": "Doğukan Yazar",
+  "author": "Your Name",
   "published": true,
   "views": 0,
   "readingTime": "7 dakika",
@@ -68,7 +68,7 @@ You can use the Firebase Admin SDK to batch import data programmatically.
   "category": "Performance Testing",
   "tags": ["jmeter", "performance", "load-testing", "qa", "testing"],
   "coverImage": "https://via.placeholder.com/1200x600/f59e0b/ffffff?text=Performance+Testing",
-  "author": "Doğukan Yazar",
+  "author": "Your Name",
   "published": true,
   "views": 0,
   "readingTime": "8 dakika",
@@ -87,8 +87,8 @@ You can use the Firebase Admin SDK to batch import data programmatically.
   "description": "Selenium WebDriver ve Python kullanılarak geliştirilmiş kapsamlı e-ticaret test otomasyon framework'ü. Page Object Model, Data-Driven Testing ve CI/CD entegrasyonu içerir.",
   "category": "Automation",
   "technologies": ["Selenium", "Python", "Pytest", "Jenkins", "Allure"],
-  "githubUrl": "https://github.com/dogukanyazar8/ecommerce-automation",
-  "demoUrl": "https://github.com/dogukanyazar8/ecommerce-automation#readme",
+  "githubUrl": "https://github.com/yourusername/ecommerce-automation",
+  "demoUrl": "https://github.com/yourusername/ecommerce-automation#readme",
   "image": "https://via.placeholder.com/600x400/2563eb/ffffff?text=E-Commerce+Automation",
   "featured": true,
   "createdAt": "2024-01-10T00:00:00Z"
@@ -103,7 +103,7 @@ You can use the Firebase Admin SDK to batch import data programmatically.
   "description": "REST Assured ve Java ile geliştirilmiş API test suite. CRUD operasyonları, authentication, data validation ve performance testlerini içerir.",
   "category": "API Testing",
   "technologies": ["REST Assured", "Java", "Maven", "TestNG", "CI/CD"],
-  "githubUrl": "https://github.com/dogukanyazar8/api-test-suite",
+  "githubUrl": "https://github.com/yourusername/api-test-suite",
   "demoUrl": "",
   "image": "https://via.placeholder.com/600x400/10b981/ffffff?text=API+Testing",
   "featured": true,
@@ -119,7 +119,7 @@ You can use the Firebase Admin SDK to batch import data programmatically.
   "description": "Appium kullanılarak iOS ve Android platformları için geliştirilmiş mobil uygulama test otomasyon projesi. Hybrid app testing desteği.",
   "category": "Mobile Testing",
   "technologies": ["Appium", "JavaScript", "WebdriverIO", "Mocha", "Docker"],
-  "githubUrl": "https://github.com/dogukanyazar8/mobile-automation",
+  "githubUrl": "https://github.com/yourusername/mobile-automation",
   "demoUrl": "",
   "image": "https://via.placeholder.com/600x400/f59e0b/ffffff?text=Mobile+Testing",
   "featured": false,
@@ -129,9 +129,12 @@ You can use the Firebase Admin SDK to batch import data programmatically.
 
 ## Important Notes
 
+- **Replace all placeholder values** with your actual information:
+  - Change "Your Name" to your actual name in the author field
+  - Update GitHub URLs from "yourusername" to your actual GitHub username
+  - Customize content to match your expertise and writing style
 - Replace timestamps with actual Firebase Timestamp objects when adding to Firestore
 - Adjust image URLs to your actual images or use the placeholders
-- Customize content to match your expertise and style
 - Add more sample data as needed
 
 ## Firebase Timestamp Format
